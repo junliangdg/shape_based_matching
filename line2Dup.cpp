@@ -1025,7 +1025,7 @@ Detector::Detector(int num_features, std::vector<int> T, float weak_thresh, floa
     this->modality = makePtr<ColorGradient>(weak_thresh, num_features, strong_threash);
     pyramid_levels = T.size();
     T_at_level = T;
-    res_map_mag_thresh = strong_threash;
+    res_map_mag_thresh = weak_threash;
 }
 
 static int gcd(int a, int b){
