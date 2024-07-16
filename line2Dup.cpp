@@ -1020,12 +1020,12 @@ Detector::Detector(std::vector<int> T)
     T_at_level = T;
 }
 
-Detector::Detector(int num_features, std::vector<int> T, float weak_thresh, float strong_threash)
+Detector::Detector(int num_features, std::vector<int> T, float weak_thresh, float strong_thresh)
 {
-    this->modality = makePtr<ColorGradient>(weak_thresh, num_features, strong_threash);
+    this->modality = makePtr<ColorGradient>(weak_thresh, num_features, strong_thresh);
     pyramid_levels = T.size();
     T_at_level = T;
-    res_map_mag_thresh = weak_threash;
+    res_map_mag_thresh = weak_thresh;
 }
 
 static int gcd(int a, int b){
