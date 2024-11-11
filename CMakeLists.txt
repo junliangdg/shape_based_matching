@@ -1,11 +1,5 @@
-cmake_minimum_required(VERSION 2.8)
-set (CMAKE_CXX_STANDARD 14)
+cmake_minimum_required(VERSION 3.1)
 project(shape_based_matching)
-
-
-# debug or release
-SET(CMAKE_BUILD_TYPE "Release")
-
 
 # arm or x86
 IF(${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm")
@@ -23,16 +17,23 @@ SET(CMAKE_CXX_FLAGS "${PLATFORM_COMPILE_FLAGS} ${COMMON_COMPILE_FLAGS} $ENV{CXXF
 SET(CMAKE_CXX_FLAGS_DEBUG "-O0 -g2 -ggdb")
 SET(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
+# Find OpenCV, you may need to set OpenCV_DIR variable
+# to the absolute path to the directory containing OpenCVConfig.cmake file
+# via the command line or GUI
+find_package(OpenCV REQUIRED)
 
-# opencv
-set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} /opt/ros/kinetic)
-find_package(OpenCV 3 REQUIRED)
-include_directories(${OpenCV_INCLUDE_DIRS})
-
+# If the package has been found, several variables will
+# be set, you can find the full list with descriptions
+# in the OpenCVConfig.cmake file.
+# Print some message showing some of them
+message(STATUS "OpenCV library status:")
+message(STATUS "    config: ${OpenCV_DIR}")
+message(STATUS "    version: ${OpenCV_VERSION}")
+message(STATUS "    libraries: ${OpenCV_LIBS}")
+message(STATUS "    include path: ${OpenCV_INCLUDE_DIRS}")
 
 # include MIPP headers
 include_directories (${INCLUDE_DIRECTORIES} "${CMAKE_CURRENT_SOURCE_DIR}/MIPP/")
-
 
 # test exe
 add_executable(${PROJECT_NAME}_test line2Dup.cpp test.cpp)
@@ -42,3 +43,9 @@ target_link_libraries(${PROJECT_NAME}_test ${OpenCV_LIBS})
 add_executable(${PROJECT_NAME}_test_fusion line2Dup.cpp test_fusion.cpp)
 target_link_libraries(${PROJECT_NAME}_test_fusion ${OpenCV_LIBS})
 
+
+find_package(OpenMP)
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(${PROJECT_NAME}_test OpenMP::OpenMP_CXX)
+    add_compile_definitions(_OPENMP)
+endif()

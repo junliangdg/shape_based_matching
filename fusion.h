@@ -1485,7 +1485,8 @@ public:
            nodes_.back()->output_type == out_v[0].type() && "last node is not compatible");
 
 #ifdef _OPENMP
-#pragma omp parallel num_threads(num_threads_)
+#pragma omp parallel
+    //#pragma omp parallel num_threads(num_threads_)
     {
 #endif
     // prepare private buffer here
